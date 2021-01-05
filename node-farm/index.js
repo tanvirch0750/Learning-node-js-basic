@@ -26,7 +26,52 @@ const url = require("url");
 // });
 
 //////////////////////////////////
-// SERVER
+// SERVER and ROUTING
+
+// const server = http.createServer((req, res) => {
+//   const pathName = req.url;
+//   if (pathName === "/") {
+//     res.end("This is home");
+//   } else if (pathName === "/overview") {
+//     res.end("This is overview");
+//   } else if (pathName === "/product") {
+//     res.end("This is product");
+//   } else {
+//     res.writeHead(404, { "Content-Type": "text/html" });
+//     res.end(`<h1>Page Not Found</h1>`);
+//   }
+// });
+
+//////////////////////////////////
+// BUILDING A VERY SIMPLE WEB API
+
+// But its not efficient
+// const server = http.createServer((req, res) => {
+//   const pathName = req.url;
+//   if (pathName === "/") {
+//     res.end("This is home");
+//   } else if (pathName === "/overview") {
+//     res.end("This is overview");
+//   } else if (pathName === "/product") {
+//     res.end("This is product");
+//   } else if (pathName === "/api") {
+//     fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
+//       const productData = JSON.parse(data);
+//       res.writeHead(200, {
+//         "Content-Type": "application/json",
+//       });
+//       res.end(data);
+//     });
+//   } else {
+//     res.writeHead(404, { "Content-Type": "text/html" });
+//     res.end(`<h1>Page Not Found</h1>`);
+//   }
+// });
+
+// Efficient
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
+const productObject = JSON.parse(data);
+
 const server = http.createServer((req, res) => {
   const pathName = req.url;
   if (pathName === "/") {
@@ -35,6 +80,11 @@ const server = http.createServer((req, res) => {
     res.end("This is overview");
   } else if (pathName === "/product") {
     res.end("This is product");
+  } else if (pathName === "/api") {
+    res.writeHead(200, {
+      "Content-Type": "application/json",
+    });
+    res.end(data);
   } else {
     res.writeHead(404, { "Content-Type": "text/html" });
     res.end(`<h1>Page Not Found</h1>`);
